@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinity Lab</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <h1>Infinity Lab</h1>
+    <p class="subtitle">Interaktive Experimente zur Mathematik der Unendlichkeit</p>
+  </header>
+
+  <nav class="experiment-nav" id="experiment-nav">
+    <!-- Hier trägt main.js automatisch einen Button pro registriertem Experiment ein -->
+  </nav>
+
+  <main class="experiment-stage" id="experiment-stage">
+    <p class="placeholder-text">
+      Wähle oben ein Experiment aus. Aktuell ist noch kein Experiment implementiert –
+      diese Fläche zeigt später den Inhalt des ausgewählten Moduls.
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Jugend forscht Projekt &middot; Infinity Lab</p>
+  </footer>
+
+  <!-- type="module" erlaubt uns, die Dateien in js/modules/ per import einzubinden -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
