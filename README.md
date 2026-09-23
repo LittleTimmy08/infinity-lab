@@ -12,6 +12,7 @@ infinity-lab/
 │   └── style.css           Alle Styles
 ├── js/
 │   ├── main.js              Lädt Experimente und steuert die Navigation
+│   ├── theme.js             Dark-/Light-Mode (Umschalter + Speicherung)
 │   └── modules/
 │       ├── registry.js      Zentrale Liste aller Experimente
 │       └── _template.js     Vorlage für ein neues Experiment
@@ -37,3 +38,16 @@ Du brauchst einen einfachen lokalen Server, z.B.:
    eintragen
 
 main.js muss dafür nicht verändert werden.
+
+## Themes (Dark / Light)
+
+- Die Farben jedes Themes stehen in `css/style.css` (Blöcke `:root` = Dark und
+  `[data-theme="light"]`). Im restlichen CSS nur `var(--color-...)` benutzen,
+  nie feste Hex-Werte.
+- `js/theme.js` setzt `data-theme` am `<html>`-Element und speichert die Wahl
+  in `localStorage`. Standard ist Dark.
+- Neues Theme: Name in `THEMES` (theme.js) eintragen und in style.css einen
+  Block `[data-theme="name"]` mit denselben Variablennamen anlegen.
+- Für Canvas-Diagramme (später): Farben mit
+  `getComputedStyle(document.documentElement).getPropertyValue("--color-blue")`
+  lesen und beim Theme-Wechsel neu zeichnen.

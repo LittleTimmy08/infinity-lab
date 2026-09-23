@@ -1,18 +1,55 @@
 /* =========================================================
    Infinity Lab – Basis-Stylesheet
-   Alle Farben/Abstände laufen über CSS-Variablen (:root),
+   Alle Farben/Abstände laufen über CSS-Variablen (siehe unten),
    damit man sie an einer Stelle ändern kann.
    ========================================================= */
 
-:root {
+/* ---------- Themes ----------
+   Nur die FARBEN hängen vom Theme ab. Jedes Theme ist ein Block, der
+   dieselben Variablennamen neu belegt. Umgeschaltet wird über das
+   Attribut data-theme am <html>-Element (siehe js/theme.js).
+   Dark ist der Standard (gilt auch, wenn noch kein data-theme gesetzt ist).
+   Ein weiteres Theme = ein weiterer Block [data-theme="name"] + ein
+   Eintrag in THEMES in theme.js. */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
   --color-bg: #0a0e1f;
   --color-surface: #10162e;
+  --color-surface-2: #182042;
   --color-border: #23294a;
   --color-text: #f1f2f8;
   --color-text-muted: #9aa1c4;
   --color-blue: #5b8def;
   --color-violet: #9b6bef;
+  --color-success: #4ade9a;
+  --color-warning: #f5b942;
+  --color-error: #f2707c;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
 
+/* Muss NACH dem Dark-Block stehen: gleiche Spezifität, der spätere Block gewinnt. */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f3f5fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eaeef8;
+  --color-border: #d9deee;
+  --color-text: #1b2140;
+  --color-text-muted: #596087;
+  --color-blue: #3a6fdc;
+  --color-violet: #7a4fd6;
+  --color-success: #1f9d63;
+  --color-warning: #b7791f;
+  --color-error: #d1434f;
+  --shadow-card: 0 1px 2px rgba(27, 33, 64, 0.06);
+  --shadow-card-hover: 0 8px 24px rgba(27, 33, 64, 0.12);
+}
+
+/* Theme-unabhängige Werte */
+:root {
   --font-base: system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --space-sm: 0.5rem;
@@ -35,14 +72,43 @@ body {
   line-height: 1.5;
 }
 
+/* Kurzer, dezenter Farbübergang beim Theme-Wechsel */
+body,
+.site-header,
+.nav-link,
+.site-footer,
+.theme-toggle {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .site-header,
+  .nav-link,
+  .site-footer,
+  .theme-toggle,
+  .card {
+    transition: none;
+  }
+}
+
 /* ---------- Header: links Logo, rechts Navigation ---------- */
 
 .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
   padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--color-border);
+}
+
+/* Rechte Seite des Headers: Navigation + Theme-Switcher */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .logo {
@@ -80,6 +146,55 @@ body {
 .nav-link:focus-visible {
   outline: 2px solid var(--color-blue);
   outline-offset: 2px;
+}
+
+/* ---------- Theme-Switcher (Button im Header) ---------- */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-surface-2);
+  border-color: var(--color-violet);
+}
+
+.theme-toggle:active {
+  transform: scale(0.94);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* Im Dark Mode zeigt der Button die Sonne (= "zu Hell wechseln"),
+   im Light Mode den Mond (= "zu Dunkel wechseln"). Das steuert nur CSS. */
+.theme-toggle .icon-moon {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .icon-moon {
+  display: block;
 }
 
 /* ---------- Hero: viel Freiraum, große Überschrift ---------- */
@@ -136,12 +251,15 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: var(--space-lg);
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s ease, border-color 0.25s ease,
+    background-color 0.25s ease, box-shadow 0.15s ease;
 }
 
 .card:hover {
   transform: translateY(-4px);
   border-color: var(--color-violet);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .card-visual {
