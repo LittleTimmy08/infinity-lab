@@ -28,6 +28,12 @@
   --color-error: #f2707c;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --hero-bg:
+    radial-gradient(ellipse at 78% 45%, rgba(122, 92, 240, 0.30), transparent 60%),
+    radial-gradient(ellipse at 15% 0%, rgba(91, 141, 239, 0.18), transparent 55%),
+    linear-gradient(180deg, #0d1432, var(--color-bg));
+  --hero-star: #ffffff;
+  --hero-glow-opacity: 0.85;
 }
 
 /* Muss NACH dem Dark-Block stehen: gleiche Spezifität, der spätere Block gewinnt. */
@@ -46,6 +52,12 @@
   --color-error: #d1434f;
   --shadow-card: 0 1px 2px rgba(27, 33, 64, 0.06);
   --shadow-card-hover: 0 8px 24px rgba(27, 33, 64, 0.12);
+  --hero-bg:
+    radial-gradient(ellipse at 78% 45%, rgba(122, 79, 214, 0.16), transparent 60%),
+    radial-gradient(ellipse at 15% 0%, rgba(58, 111, 220, 0.12), transparent 55%),
+    linear-gradient(180deg, #e8edfb, var(--color-bg));
+  --hero-star: #7a4fd6;
+  --hero-glow-opacity: 0.4;
 }
 
 /* Theme-unabhängige Werte */
@@ -109,6 +121,15 @@ body,
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+}
+
+/* Mobil: Navigation darf umbrechen, der Theme-Button bleibt oben rechts */
+@media (max-width: 900px) {
+  .header-right {
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 }
 
 .logo {
@@ -200,10 +221,52 @@ body,
 /* ---------- Hero: viel Freiraum, große Überschrift ---------- */
 
 .hero {
-  max-width: 760px;
-  margin: 0 auto;
+  background: var(--hero-bg);
+  border-bottom: 1px solid var(--color-border);
   padding: var(--space-xl) var(--space-lg);
-  text-align: center;
+  overflow: hidden;
+}
+
+/* Text links, Grafik rechts; auf schmalen Displays untereinander */
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.hero-text {
+  text-align: left;
+}
+
+.hero-art {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+}
+
+.hero-stars {
+  fill: var(--hero-star);
+}
+
+.hero-glow {
+  opacity: var(--hero-glow-opacity);
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-art {
+    max-height: 200px;
+  }
 }
 
 .hero h1 {
@@ -226,7 +289,7 @@ body,
 .experiments {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 var(--space-lg) var(--space-xl) var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
 }
 
 .experiments h2 {

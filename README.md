@@ -51,3 +51,10 @@ main.js muss dafür nicht verändert werden.
 - Für Canvas-Diagramme (später): Farben mit
   `getComputedStyle(document.documentElement).getPropertyValue("--color-blue")`
   lesen und beim Theme-Wechsel neu zeichnen.
+
+## Hero-Grafik
+
+Die Grafik im Hero (Sterne + leuchtende ∞-Schleife) ist ein inline-SVG in
+`index.html` und braucht keine Bilddateien. Ihre Farben kommen aus den
+Theme-Variablen (`--color-blue`, `--color-violet`, `--hero-star`,
+`--hero-glow-opacity`), der Hintergrund aus `--hero-bg` in style.css.

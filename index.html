@@ -38,8 +38,70 @@
     <section id="home-view">
 
       <section class="hero">
-        <h1>∞ Infinity Lab</h1>
-        <p class="hero-subtitle">Interaktive Experimente zu mathematischer Unendlichkeit</p>
+        <div class="hero-inner">
+          <div class="hero-text">
+            <h1>∞ Infinity Lab</h1>
+            <p class="hero-subtitle">Interaktive Experimente zu mathematischer Unendlichkeit</p>
+          </div>
+          <!-- Rein dekorativ (kein Bild-Download): Farben kommen aus den Theme-Variablen -->
+          <svg class="hero-art" viewBox="0 0 600 300" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="hero-loop-gradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" style="stop-color: var(--color-blue)"/>
+            <stop offset="1" style="stop-color: var(--color-violet)"/>
+          </linearGradient>
+          <filter id="hero-glow-filter" x="-20%" y="-30%" width="140%" height="160%">
+            <feGaussianBlur stdDeviation="10"/>
+          </filter>
+        </defs>
+
+        <!-- Sterne -->
+        <g class="hero-stars">
+          <circle cx="339" cy="85" r="1.3" opacity="0.35"/>
+          <circle cx="82" cy="282" r="0.8" opacity="0.7"/>
+          <circle cx="67" cy="267" r="1" opacity="0.35"/>
+          <circle cx="96" cy="230" r="1.3" opacity="0.35"/>
+          <circle cx="254" cy="54" r="1.6" opacity="0.9"/>
+          <circle cx="68" cy="71" r="1" opacity="0.35"/>
+          <circle cx="414" cy="33" r="1" opacity="0.35"/>
+          <circle cx="578" cy="76" r="1" opacity="0.9"/>
+          <circle cx="155" cy="284" r="0.8" opacity="0.7"/>
+          <circle cx="581" cy="100" r="0.8" opacity="0.5"/>
+          <circle cx="389" cy="57" r="1.6" opacity="0.35"/>
+          <circle cx="585" cy="38" r="1.6" opacity="0.5"/>
+          <circle cx="516" cy="280" r="1.3" opacity="0.7"/>
+          <circle cx="484" cy="240" r="1" opacity="0.7"/>
+          <circle cx="262" cy="100" r="1" opacity="0.35"/>
+          <circle cx="315" cy="276" r="1.3" opacity="0.7"/>
+          <circle cx="467" cy="155" r="1.6" opacity="0.35"/>
+          <circle cx="128" cy="270" r="1.3" opacity="0.5"/>
+          <circle cx="358" cy="85" r="1.3" opacity="0.9"/>
+          <circle cx="48" cy="47" r="1.6" opacity="0.7"/>
+          <circle cx="356" cy="187" r="1.6" opacity="0.9"/>
+          <circle cx="475" cy="43" r="0.8" opacity="0.7"/>
+          <circle cx="493" cy="41" r="0.8" opacity="0.7"/>
+          <circle cx="464" cy="153" r="1.3" opacity="0.7"/>
+          <circle cx="31" cy="244" r="1" opacity="0.5"/>
+          <circle cx="127" cy="260" r="0.8" opacity="0.5"/>
+          <circle cx="302" cy="74" r="1" opacity="0.9"/>
+          <circle cx="408" cy="262" r="0.8" opacity="0.5"/>
+          <circle cx="467" cy="213" r="1.6" opacity="0.7"/>
+          <circle cx="148" cy="228" r="1.6" opacity="0.7"/>
+          <circle cx="433" cy="191" r="1.3" opacity="0.5"/>
+          <circle cx="162" cy="50" r="1" opacity="0.5"/>
+          <circle cx="245" cy="127" r="0.8" opacity="0.9"/>
+          <circle cx="194" cy="142" r="1" opacity="0.35"/>
+        </g>
+
+        <!-- Leuchtende Unendlichkeitsschleife: Glow, dann mehrere feine Linien -->
+        <g fill="none" stroke="url(#hero-loop-gradient)" stroke-linecap="round">
+          <path class="hero-glow" d="M300,150 C300,150 240,40 150,40 C80,40 40,90 40,150 C40,210 80,260 150,260 C240,260 300,150 300,150 C300,150 360,40 450,40 C520,40 560,90 560,150 C560,210 520,260 450,260 C360,260 300,150 300,150 Z" stroke-width="16" filter="url(#hero-glow-filter)"/>
+          <path d="M300,150 C300,150 240,40 150,40 C80,40 40,90 40,150 C40,210 80,260 150,260 C240,260 300,150 300,150 C300,150 360,40 450,40 C520,40 560,90 560,150 C560,210 520,260 450,260 C360,260 300,150 300,150 Z" stroke-width="3"/>
+          <path d="M300,150 C300,150 240,40 150,40 C80,40 40,90 40,150 C40,210 80,260 150,260 C240,260 300,150 300,150 C300,150 360,40 450,40 C520,40 560,90 560,150 C560,210 520,260 450,260 C360,260 300,150 300,150 Z" stroke-width="1.2" opacity="0.7" transform="translate(300 150) scale(1.06 1.1) translate(-300 -150)"/>
+          <path d="M300,150 C300,150 240,40 150,40 C80,40 40,90 40,150 C40,210 80,260 150,260 C240,260 300,150 300,150 C300,150 360,40 450,40 C520,40 560,90 560,150 C560,210 520,260 450,260 C360,260 300,150 300,150 Z" stroke-width="1" opacity="0.45" transform="translate(300 150) scale(0.94 0.88) translate(-300 -150)"/>
+        </g>
+      </svg>
+        </div>
       </section>
 
       <section class="experiments">
