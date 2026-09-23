@@ -9,19 +9,36 @@
 <body>
 
   <header class="site-header">
-    <h1>Infinity Lab</h1>
-    <p class="subtitle">Interaktive Experimente zur Mathematik der Unendlichkeit</p>
+    <div class="logo">∞ Infinity Lab</div>
+    <nav class="primary-nav" id="primary-nav">
+      <!-- "Start"-Button ist fest im HTML, Experiment-Buttons trägt main.js automatisch ein -->
+      <button type="button" class="nav-link is-active" id="nav-home">Start</button>
+    </nav>
   </header>
 
-  <nav class="experiment-nav" id="experiment-nav">
-    <!-- Hier trägt main.js automatisch einen Button pro registriertem Experiment ein -->
-  </nav>
+  <main>
 
-  <main class="experiment-stage" id="experiment-stage">
-    <p class="placeholder-text">
-      Wähle oben ein Experiment aus. Aktuell ist noch kein Experiment implementiert –
-      diese Fläche zeigt später den Inhalt des ausgewählten Moduls.
-    </p>
+    <!-- Startseite: Hero + Kartenübersicht. Wird gezeigt, solange kein Experiment aktiv ist. -->
+    <section id="home-view">
+
+      <section class="hero">
+        <h1>∞ Infinity Lab</h1>
+        <p class="hero-subtitle">Interaktive Experimente zu mathematischer Unendlichkeit</p>
+      </section>
+
+      <section class="experiments">
+        <h2>Experimente</h2>
+        <div class="card-grid" id="experiment-cards">
+          <!-- Die drei Experiment-Karten trägt main.js aus registry.js hier ein -->
+        </div>
+      </section>
+
+    </section>
+
+    <!-- Anzeigefläche für ein einzelnes Experiment. Bleibt versteckt, bis in der Nav
+         ein Experiment ausgewählt wird. -->
+    <section id="experiment-stage" hidden></section>
+
   </main>
 
   <footer class="site-footer">
