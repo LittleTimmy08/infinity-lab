@@ -13,12 +13,17 @@
  */
 
 import { experiments } from "./modules/registry.js";
+import { createExperimentCard } from "./components/experiment-card.js";
 
 const navElement = document.getElementById("primary-nav");
 const homeNavButton = document.getElementById("nav-home");
 const homeView = document.getElementById("home-view");
 const stageElement = document.getElementById("experiment-stage");
 const cardGrid = document.getElementById("experiment-cards");
+
+// Merkt sich pro Experiment seinen Nav-Button (Schlüssel = experiment.id),
+// damit auch ein Klick auf eine Karte den richtigen Nav-Button markieren kann.
+const navButtons = new Map();
 
 /**
  * Blendet die Startseite ein und die Experiment-Ansicht aus.
@@ -39,6 +44,7 @@ function showExperiment(experiment, navButton) {
   stageElement.innerHTML = "";
   experiment.render(stageElement);
   setActiveNavButton(navButton);
+  window.scrollTo({ top: 0 });
 }
 
 function setActiveNavButton(activeButton) {
@@ -59,6 +65,7 @@ function buildNavigation() {
     button.textContent = experiment.title;
     button.addEventListener("click", () => showExperiment(experiment, button));
     navElement.appendChild(button);
+    navButtons.set(experiment.id, button);
   });
 
   homeNavButton.addEventListener("click", showHome);
@@ -66,17 +73,14 @@ function buildNavigation() {
 
 /**
  * Baut für jedes Experiment eine Karte auf der Startseite.
- * Die Karten sind aktuell reine Platzhalter ohne Klick-Funktion.
+ * Das Aussehen der Karte steckt in components/experiment-card.js,
+ * ein Klick auf ihren Button öffnet das Experiment.
  */
 function buildCards() {
   experiments.forEach((experiment) => {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="card-visual" aria-hidden="true">∞</div>
-      <h3 class="card-title">${experiment.title}</h3>
-      <p class="card-description">${experiment.description}</p>
-    `;
+    const card = createExperimentCard(experiment, () =>
+      showExperiment(experiment, navButtons.get(experiment.id))
+    );
     cardGrid.appendChild(card);
   });
 }

@@ -13,6 +13,9 @@ infinity-lab/
 ├── js/
 │   ├── main.js              Lädt Experimente und steuert die Navigation
 │   ├── theme.js             Dark-/Light-Mode (Umschalter + Speicherung)
+│   ├── components/
+│   │   ├── experiment-card.js    Karte eines Experiments (Startseite)
+│   │   └── experiment-frame.js   Rahmen einer Experiment-Seite (Visualisierung + Steuerung)
 │   └── modules/
 │       ├── registry.js      Zentrale Liste aller Experimente
 │       └── _template.js     Vorlage für ein neues Experiment
@@ -33,7 +36,8 @@ Du brauchst einen einfachen lokalen Server, z.B.:
 ## Ein neues Experiment hinzufügen
 
 1. `js/modules/_template.js` kopieren und umbenennen, z.B. `hilbert-hotel.js`
-2. `id`, `title` und die `render()`-Funktion anpassen
+2. `id`, `title`, `description`, `symbol`, `badge`, `status` und die
+   `render()`-Funktion anpassen
 3. In `js/modules/registry.js` importieren und in das `experiments`-Array
    eintragen
 
@@ -58,3 +62,35 @@ Die Grafik im Hero (Sterne + leuchtende ∞-Schleife) ist ein inline-SVG in
 `index.html` und braucht keine Bilddateien. Ihre Farben kommen aus den
 Theme-Variablen (`--color-blue`, `--color-violet`, `--hero-star`,
 `--hero-glow-opacity`), der Hintergrund aus `--hero-bg` in style.css.
+
+## Komponentenbibliothek (css/style.css, Abschnitt "KOMPONENTEN")
+
+| Klasse | Zweck |
+| --- | --- |
+| `.card` / `.card--interactive` | Fläche mit Rahmen; die zweite Variante hebt sich beim Hover an |
+| `.btn` / `.btn--secondary` | Haupt- und Nebenaktion |
+| `.badge` / `.badge--muted` | Label für Typ oder Status |
+| `.field`, `.field-label`, `.field-value` | Beschriftung (und Wert) über einem Steuerelement |
+| `.input` | Textfeld |
+| `.slider` | Schieberegler (`<input type="range">`) |
+| `.experiment-card` | Karte auf der Startseite |
+| `.experiment-layout` | zwei Spalten (Laptop) bzw. untereinander (schmal) |
+
+Die Komponenten benutzen nur Variablen (`--color-primary`, `--radius-sm`,
+`--transition` ...). Farben nie direkt in Komponenten schreiben.
+
+## Experiment-Rahmen benutzen
+
+```js
+import { createExperimentFrame } from "../components/experiment-frame.js";
+
+render(container) {
+  const { visualization, controls } = createExperimentFrame(container, {
+    title: "Mein Experiment",
+  });
+  visualization.innerHTML = "...";  // links
+  controls.innerHTML = "...";       // rechts (.btn, .slider, .input ...)
+}
+```
+
+Ein vollständiges Beispiel steht in `js/modules/_template.js`.
