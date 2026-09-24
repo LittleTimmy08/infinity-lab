@@ -19,8 +19,17 @@ infinity-lab/
 │   │   ├── experiment-card.js    Karte eines Experiments (Startseite)
 │   │   ├── nav-dropdown.js       Öffnen/Schließen des Experimente-Dropdowns
 │   │   └── experiment-frame.js   Rahmen einer Experiment-Seite (Visualisierung + Steuerung)
+│   ├── content/             CONTENT: mathematischer Inhalt als reine Daten
+│   │   ├── index.js         getContent(id), Inhalte werden eingefroren
+│   │   ├── hilbert-hotel.js Inhalt zum Hilbert-Hotel
+│   │   └── rules.js         Auswertung der Zimmerregeln (n → n+1, n → 2n)
+│   ├── presentations/       PRESENTATION: Darstellungen desselben Inhalts (Platzhalter)
+│   │   ├── index.js         getPresentation(id)
+│   │   ├── narrative.js, visual.js, interactive.js
+│   │   └── dom.js           kleiner Helfer zum Bauen von DOM-Elementen
 │   └── modules/
 │       ├── registry.js      Zentrale Liste aller Experimente
+│       ├── content-experiment.js  Verbindet Content + Presentation zu einem render()
 │       └── _template.js     Vorlage für ein neues Experiment
 └── README.md
 ```
@@ -97,6 +106,34 @@ render(container) {
 ```
 
 Ein vollständiges Beispiel steht in `js/modules/_template.js`.
+
+## Content und Presentation
+
+Inhalt und Darstellung sind getrennt, damit **derselbe** Inhalt später in
+verschiedenen Darstellungen gezeigt werden kann:
+
+```
+js/content/hilbert-hotel.js      (ein Inhalt)
+        ↓ dasselbe Objekt
+   narrative | visual | interactive      (js/presentations/)
+```
+
+- **Content** besteht nur aus Daten (Texte, Zahlen, Listen). Kein HTML, kein CSS,
+  keine Funktionen. Die Zimmerregeln stehen als Zahlen im Content
+  (`roomRule: { factor, offset }`), ausgerechnet werden sie nur in `content/rules.js`.
+- **Presentation** hat die Form `{ id, label, render(content, { visualization, controls }) }`.
+  `render` darf eine Aufräum-Funktion zurückgeben. Den Content nur lesen, nicht verändern
+  (er ist eingefroren).
+- **Registry:** Ein Experiment verweist mit `contentId` und `presentations` darauf.
+  `content-experiment.js` macht daraus das `render()` für `main.js`.
+- **Neue Darstellung:** Datei in `js/presentations/` anlegen, in `presentations/index.js`
+  eintragen, in der Registry bei `presentations` ergänzen.
+- **Umschalter im Experiment ("Darstellung (technische Vorschau)"):** nur für die
+  Entwicklung. Er ist keine Gruppenzuweisung.
+
+Die Namen `narrative`, `visual` und `interactive` sind technische Platzhalter und
+legen keine Versuchsgruppen fest. Sprache und Lernziele im Content sind Entwürfe
+und noch nicht an Klasse 5–7 angepasst.
 
 ## Router (js/core/router.js)
 

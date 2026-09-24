@@ -33,12 +33,21 @@
  *     }
  *   }
  *
- * Aktuell haben alle drei Experimente nur eine Platzhalter-render()-
- * Funktion, weil noch keine Mathematik implementiert ist. Die echte
- * Logik kommt später jeweils in eine eigene Datei (siehe _template.js).
+ * Statt render() kann ein Experiment auf CONTENT und PRESENTATION verweisen:
+ *
+ *     contentId:     "hilbert-hotel",                       // js/content/
+ *     presentations: ["narrative", "visual", "interactive"] // js/presentations/
+ *
+ * Dann baut js/modules/content-experiment.js das render() automatisch:
+ * derselbe Inhalt, mehrere Darstellungen. Die erste Darstellung der Liste
+ * wird zuerst gezeigt. Hat ein Eintrag ein eigenes render(), bleibt es unverändert.
+ *
+ * Aktuell nutzt nur das Hilbert-Hotel die Content/Presentation-Struktur.
+ * Die beiden anderen haben noch eine Platzhalter-render()-Funktion.
  */
 
 import { createExperimentFrame } from "../components/experiment-frame.js";
+import { createContentRender } from "./content-experiment.js";
 
 /**
  * Platzhalter: zeigt den Experiment-Rahmen mit Beispiel-Bedienelementen.
@@ -81,7 +90,7 @@ export const categories = [
   // Später z. B.: { id: "informatik", title: "Informatik" },
 ];
 
-export const experiments = [
+const experimentDefinitions = [
   {
     id: "hilbert-hotel",
     category: "mathematik",
@@ -90,7 +99,8 @@ export const experiments = [
     symbol: "∞",
     badge: "Paradoxon",
     status: "Platzhalter",
-    render: placeholderRender("Hilbert-Hotel"),
+    contentId: "hilbert-hotel",
+    presentations: ["narrative", "visual", "interactive"], // technische Platzhalter
   },
   {
     id: "countable-nz",
@@ -113,3 +123,11 @@ export const experiments = [
     render: placeholderRender("Cantors Diagonalargument"),
   },
 ];
+
+// Einträge mit contentId bekommen ihr render() aus Content + Presentation.
+// Einträge mit eigenem render() bleiben unverändert.
+export const experiments = experimentDefinitions.map((experiment) =>
+  experiment.render || !experiment.contentId
+    ? experiment
+    : { ...experiment, render: createContentRender(experiment) }
+);

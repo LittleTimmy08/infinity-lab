@@ -797,6 +797,44 @@ body,
   color: var(--color-text-muted);
 }
 
+/* ---------- Darstellungen (Presentations) ----------
+   Nur für die Platzhalter-Darstellungen aus js/presentations/.
+   Baut ausschließlich auf vorhandenen Variablen auf. */
+
+.experiment-toolbar {
+  max-width: 22rem;
+  margin-bottom: var(--space-md);
+}
+
+.presentation {
+  display: grid;
+  gap: var(--space-md);
+  width: 100%;
+  text-align: left;
+  align-self: start;
+}
+
+.presentation h3,
+.presentation p {
+  margin: 0;
+}
+
+.presentation__muted {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.presentation__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.presentation__svg {
+  width: 100%;
+  height: auto;
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {

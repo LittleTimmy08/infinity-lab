@@ -16,11 +16,15 @@
  *   visualization.innerHTML = "...";   // links
  *   controls.innerHTML = "...";        // rechts
  *
+ * Optional: { toolbar: true } fügt zwischen Kopf und den zwei Flächen
+ * eine Leiste ein (z.B. für die Auswahl einer Darstellung). Ohne diese
+ * Option bleibt die Seite exakt wie bisher, "toolbar" ist dann null.
+ *
  * Das Aussehen (zwei Spalten, untereinander auf kleinen Displays)
  * steckt komplett in style.css (Abschnitt "Experiment-Rahmen").
  */
 
-export function createExperimentFrame(container, { title, description = "" }) {
+export function createExperimentFrame(container, { title, description = "", toolbar = false }) {
   // Feste Struktur. Titel und Beschreibung setzen wir unten per textContent,
   // damit sie nie als HTML interpretiert werden.
   container.innerHTML = `
@@ -29,6 +33,7 @@ export function createExperimentFrame(container, { title, description = "" }) {
         <h2 class="experiment-title"></h2>
         <p class="experiment-description"></p>
       </header>
+      <div class="experiment-toolbar"></div>
       <div class="experiment-layout">
         <section class="card experiment-visualization" aria-label="Visualisierung"></section>
         <aside class="card experiment-controls" aria-label="Steuerung">
@@ -48,8 +53,12 @@ export function createExperimentFrame(container, { title, description = "" }) {
     descriptionElement.remove();
   }
 
+  const toolbarElement = container.querySelector(".experiment-toolbar");
+  if (!toolbar) toolbarElement.remove();
+
   return {
     visualization: container.querySelector(".experiment-visualization"),
     controls: container.querySelector(".experiment-controls__body"),
+    toolbar: toolbar ? toolbarElement : null,
   };
 }
