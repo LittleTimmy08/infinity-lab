@@ -15,6 +15,7 @@ infinity-lab/
 │   ├── theme.js             Dark-/Light-Mode (Umschalter + Speicherung)
 │   ├── components/
 │   │   ├── experiment-card.js    Karte eines Experiments (Startseite)
+│   │   ├── nav-dropdown.js       Öffnen/Schließen des Experimente-Dropdowns
 │   │   └── experiment-frame.js   Rahmen einer Experiment-Seite (Visualisierung + Steuerung)
 │   └── modules/
 │       ├── registry.js      Zentrale Liste aller Experimente
@@ -94,3 +95,20 @@ render(container) {
 ```
 
 Ein vollständiges Beispiel steht in `js/modules/_template.js`.
+
+## Navigation
+
+Header: `⌂ Startseite` und `Experimente ▾`. Das Dropdown zeigt die Experimente
+nach Kategorien gruppiert.
+
+- **Daten:** `categories` und `experiments` in `js/modules/registry.js`. Jedes
+  Experiment verweist mit `category` auf die `id` einer Kategorie.
+- **Aufbau:** `main.js` baut daraus Gruppen (Kategorie-Überschrift + Einträge).
+  Kategorien ohne Experimente werden nicht angezeigt.
+- **Verhalten:** `js/components/nav-dropdown.js` (Klick, Klick außerhalb, Escape, Tab).
+- **Aktiver Zustand:** Startseite aktiv, solange keine Experiment-Seite offen ist;
+  sonst ist "Experimente" aktiv und der geöffnete Eintrag im Menü markiert.
+
+Neues Experiment: Eintrag in `experiments` mit passender `category`.
+Neue Kategorie: Eintrag in `categories` und `category` beim Experiment setzen.
+Eine unbekannte Kategorie meldet der Browser in der Konsole (F12).

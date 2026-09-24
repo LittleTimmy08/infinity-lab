@@ -1,16 +1,24 @@
 /**
  * registry.js
  * ------------------------------------------------------------
- * Hier werden alle Experimente eingetragen, die im Infinity Lab
- * auftauchen sollen. main.js liest NUR diese Liste aus – sowohl
- * für die Navigation im Header als auch für die Experiment-Karten
- * auf der Startseite. So steht Titel/Beschreibung jedes Experiments
- * an genau einer Stelle im Code.
+ * Hier werden alle Kategorien und Experimente eingetragen, die im
+ * Infinity Lab auftauchen sollen. main.js liest NUR diese Listen
+ * aus – sowohl für das Experimente-Dropdown im Header als auch für
+ * die Experiment-Karten auf der Startseite. So steht Titel/Beschreibung
+ * jedes Experiments an genau einer Stelle im Code.
+ *
+ * Eine Kategorie gruppiert Experimente im Dropdown:
+ *
+ *   { id: "mathematik", title: "Mathematik" }
+ *
+ * Die Reihenfolge in `categories` bestimmt die Reihenfolge der Gruppen.
+ * Kategorien ohne Experimente werden im Dropdown nicht angezeigt.
  *
  * Ein Experiment ist ein Objekt mit diesen Eigenschaften:
  *
  *   {
  *     id:          "eindeutiger-name",   // z.B. "hilbert-hotel"
+ *     category:    "mathematik",         // muss zu einer id in `categories` passen
  *     title:       "Anzeigename",
  *     description: "Kurzer Text für die Karte auf der Startseite",
  *     symbol:      "∞",                  // großes Zeichen im Bildbereich der Karte
@@ -65,9 +73,15 @@ function placeholderRender(title) {
   };
 }
 
+export const categories = [
+  { id: "mathematik", title: "Mathematik" },
+  // Später z. B.: { id: "informatik", title: "Informatik" },
+];
+
 export const experiments = [
   {
     id: "hilbert-hotel",
+    category: "mathematik",
     title: "Hilbert-Hotel",
     description: "Ein Hotel mit unendlich vielen Zimmern hat trotzdem immer noch Platz für neue Gäste.",
     symbol: "∞",
@@ -77,6 +91,7 @@ export const experiments = [
   },
   {
     id: "countable-nz",
+    category: "mathematik",
     title: "Abzählbarkeit: ℕ ↔ ℤ",
     description: "Wie sich jeder ganzen Zahl eindeutig eine natürliche Zahl zuordnen lässt.",
     symbol: "ℕ ↔ ℤ",
@@ -86,6 +101,7 @@ export const experiments = [
   },
   {
     id: "diagonal-argument",
+    category: "mathematik",
     title: "Cantors Diagonalargument",
     description: "Warum es unmöglich ist, alle reellen Zahlen in einer Liste zu erfassen.",
     symbol: "ℝ",

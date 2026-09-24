@@ -169,6 +169,9 @@ body,
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: transparent;
   border: 1px solid transparent;
   color: var(--color-text-muted);
@@ -176,6 +179,14 @@ body,
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.9rem;
+}
+
+/* Icons in der Navigation (Haus): kleine Größe, Farbe kommt von currentColor,
+   folgt also automatisch Theme, Hover und Aktiv-Zustand des Buttons. */
+.nav-link__icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
 }
 
 .nav-link:hover {
@@ -191,6 +202,137 @@ body,
 .nav-link:focus-visible {
   outline: var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* ---------- Dropdown in der Navigation ("Experimente") ----------
+   .nav-dropdown            Wrapper (Bezugspunkt für die Position des Menüs)
+   .nav-dropdown__trigger   der Auslöser (zusätzlich .nav-link)
+   .nav-dropdown__menu      das Menü; sichtbar nur mit der Klasse .is-open
+   .nav-dropdown__title     Titel im Menü
+   .nav-dropdown__label     Kategorie-Überschrift
+   .nav-dropdown__item      ein Eintrag (aktiv = aria-current="page") */
+
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown__trigger[aria-expanded="true"] {
+  color: var(--color-text);
+}
+
+.nav-dropdown__chevron {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.nav-dropdown__trigger[aria-expanded="true"] .nav-dropdown__chevron {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown__menu {
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  right: 0; /* rechtsbündig zum Auslöser: läuft am rechten Bildschirmrand nicht über */
+  z-index: 20;
+  min-width: 16rem;
+  max-width: calc(100vw - 2 * var(--space-md));
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: var(--space-sm);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card-hover);
+
+  /* geschlossen: unsichtbar und nicht bedienbar (auch nicht per Tab).
+     visibility wechselt erst NACH dem Ausblenden (0.15s Verzögerung). */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast),
+    visibility 0s linear 0.15s;
+}
+
+.nav-dropdown__menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.nav-dropdown__title {
+  margin: 0 0 var(--space-xs) 0;
+  padding: var(--space-xs) 0.6rem var(--space-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav-dropdown__label {
+  margin: 0;
+  padding: var(--space-sm) 0.6rem var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.nav-dropdown__item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  color: var(--color-text-muted);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-dropdown__item:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface-2);
+}
+
+.nav-dropdown__item:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.nav-dropdown__item[aria-current="page"] {
+  font-weight: 600;
+  color: var(--color-primary-soft-text);
+  background-color: var(--color-primary-soft);
+}
+
+/* Sehr schmale Displays: Das Menü hängt nicht mehr am Auslöser, sondern
+   liegt unter dem Header über die volle Breite. So läuft es nie aus dem Bild. */
+@media (max-width: 480px) {
+  .site-header {
+    position: relative;
+  }
+
+  .nav-dropdown {
+    position: static;
+  }
+
+  .nav-dropdown__menu {
+    left: var(--space-md);
+    right: var(--space-md);
+    min-width: 0;
+    max-width: none;
+  }
 }
 
 /* ---------- Theme-Switcher (Button im Header) ---------- */

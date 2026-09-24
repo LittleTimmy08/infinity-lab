@@ -15,8 +15,31 @@
     <div class="logo">∞ Infinity Lab</div>
     <div class="header-right">
       <nav class="primary-nav" id="primary-nav">
-        <!-- "Start"-Button ist fest im HTML, Experiment-Buttons trägt main.js automatisch ein -->
-        <button type="button" class="nav-link is-active" id="nav-home">Start</button>
+        <!-- Startseite: Haus-Icon und Text stehen im selben Button (ein Tab-Stopp, beides klickbar).
+             Das Icon hat keine feste Farbe (currentColor) und passt sich Theme, Hover und Aktiv-Zustand an. -->
+        <button type="button" class="nav-link is-active" id="nav-home" aria-current="page">
+          <svg class="nav-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 11.5 12 4l9 7.5"/>
+            <path d="M5 10v10h5v-6h4v6h5V10"/>
+          </svg>
+          <span>Startseite</span>
+        </button>
+
+        <!-- Experimente-Dropdown: Auslöser und leeres Menü stehen fest hier.
+             Gruppen und Einträge trägt main.js aus registry.js ein,
+             Öffnen/Schließen steckt in js/components/nav-dropdown.js. -->
+        <div class="nav-dropdown" id="nav-explore">
+          <button type="button" class="nav-link nav-dropdown__trigger" id="nav-explore-trigger"
+                  aria-expanded="false" aria-controls="nav-explore-menu">
+            <span>Experimente</span>
+            <svg class="nav-dropdown__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="nav-dropdown__menu" id="nav-explore-menu">
+            <p class="nav-dropdown__title">Experimente</p>
+          </div>
+        </div>
       </nav>
 
       <!-- Theme-Switcher: Verhalten in js/theme.js, Aussehen in style.css -->
