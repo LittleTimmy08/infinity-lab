@@ -11,7 +11,9 @@ infinity-lab/
 ├── css/
 │   └── style.css           Alle Styles
 ├── js/
-│   ├── main.js              Lädt Experimente und steuert die Navigation
+│   ├── main.js              Lädt Experimente, baut die Navigation, definiert die Routen
+│   ├── core/
+│   │   └── router.js        Hash-Router (Adresse hinter dem #) + Aufräum-Lifecycle
 │   ├── theme.js             Dark-/Light-Mode (Umschalter + Speicherung)
 │   ├── components/
 │   │   ├── experiment-card.js    Karte eines Experiments (Startseite)
@@ -95,6 +97,26 @@ render(container) {
 ```
 
 Ein vollständiges Beispiel steht in `js/modules/_template.js`.
+
+## Router (js/core/router.js)
+
+Die Adresse hinter dem `#` bestimmt, was angezeigt wird. Dadurch funktionieren
+Zurück-/Vorwärts-Button, Reload und Direktlinks.
+
+| Adresse | Ansicht |
+| --- | --- |
+| `#/` | Startseite |
+| `#/experiment/<id>` | Experiment, z. B. `#/experiment/hilbert-hotel` |
+
+Unbekannte Adressen (oder eine unbekannte `<id>`) führen zurück auf `#/`.
+Der Router kennt keine Experimente: `main.js` übergibt eine Liste von Routen
+(`path`, optional `guard`, `enter`). Muster wie `/lab/:id/:step` funktionieren
+bereits im Router, sind in `main.js` aber noch nicht eingetragen.
+
+**Aufräumen beim Verlassen:** `render(container)` darf eine Funktion
+zurückgeben. Der Router ruft sie auf, wenn man das Experiment verlässt
+(Timer stoppen, Listener entfernen ...). Experimente ohne Rückgabe
+funktionieren unverändert.
 
 ## Navigation
 

@@ -52,5 +52,12 @@ export const templateExperiment = {
     slider.addEventListener("input", () => {
       valueLabel.textContent = slider.value;
     });
+
+    // OPTIONAL: Wenn das Experiment etwas startet, das weiterlaufen würde
+    // (Timer, Animation, Listener auf document/window), hier eine Funktion
+    // zurückgeben. Der Router ruft sie auf, sobald man das Experiment verlässt.
+    //
+    //   const timer = setInterval(() => { ... }, 1000);
+    //   return () => clearInterval(timer);
   },
 };

@@ -27,6 +27,9 @@
  *     render: function(container) {
  *       // container ist das <section id="experiment-stage">-Element.
  *       // Hier entsteht später der eigentliche Inhalt/die Simulation.
+ *       // OPTIONAL: eine Funktion zurückgeben, die beim Verlassen des
+ *       // Experiments aufgerufen wird (Timer stoppen, Listener entfernen,
+ *       // requestAnimationFrame beenden). Ohne Rückgabe passiert nichts.
  *     }
  *   }
  *
