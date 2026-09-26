@@ -23,6 +23,8 @@ export const templateExperiment = {
   status: "In Arbeit",    // Bearbeitungsstand
 
   // container ist das <section id="experiment-stage"> Element.
+  // Seit Phase 5 reicht main.js optional { store } als zweiten Parameter
+  // durch (js/core/store.js, rein flüchtig) – hier nicht benötigt.
   render(container) {
     // Baut den Rahmen und gibt die zwei Flächen zurück.
     const { visualization, controls } = createExperimentFrame(container, {

@@ -24,9 +24,12 @@
  *     symbol:      "∞",                  // großes Zeichen im Bildbereich der Karte
  *     badge:       "Abzählbarkeit",      // Typ des Experiments (Badge auf der Karte)
  *     status:      "Platzhalter",        // Bearbeitungsstand (graues Badge)
- *     render: function(container) {
+ *     render: function(container, { store }) {
  *       // container ist das <section id="experiment-stage">-Element.
  *       // Hier entsteht später der eigentliche Inhalt/die Simulation.
+ *       // store (seit Phase 5, optional) ist die eine Store-Instanz aus
+ *       // main.js (js/core/store.js) – rein flüchtiger Laufzeit-Zustand,
+ *       // wird nicht gespeichert. Muss nicht benutzt werden.
  *       // OPTIONAL: eine Funktion zurückgeben, die beim Verlassen des
  *       // Experiments aufgerufen wird (Timer stoppen, Listener entfernen,
  *       // requestAnimationFrame beenden). Ohne Rückgabe passiert nichts.

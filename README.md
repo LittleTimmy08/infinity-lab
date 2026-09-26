@@ -11,9 +11,10 @@ infinity-lab/
 ├── css/
 │   └── style.css           Alle Styles
 ├── js/
-│   ├── main.js              Lädt Experimente, baut die Navigation, definiert die Routen
+│   ├── main.js              Lädt Experimente, baut die Navigation, definiert die Routen, hält den Store
 │   ├── core/
-│   │   └── router.js        Hash-Router (Adresse hinter dem #) + Aufräum-Lifecycle
+│   │   ├── router.js        Hash-Router (Adresse hinter dem #) + Aufräum-Lifecycle
+│   │   └── store.js         In-Memory-Laufzeit-Store (Session, aktuelles Experiment/Darstellung)
 │   ├── theme.js             Dark-/Light-Mode (Umschalter + Speicherung)
 │   ├── components/
 │   │   ├── experiment-card.js    Karte eines Experiments (Startseite)
@@ -165,6 +166,43 @@ jeweiligen `*-interactive.js`.
 
 Die Verständnisfrage ist **kein** Pre-/Post-Test: Es wird nichts gespeichert
 oder ausgewertet, die Auswahl lebt nur im DOM/JS-Zustand des Schritts.
+
+## Store (js/core/store.js)
+
+Ein kleiner, rein flüchtiger Laufzeit-Speicher – lebt nur im Arbeitsspeicher
+des Browsers, kein `localStorage`, kein `sessionStorage`, keine Cookies,
+kein Server. Nach einem Reload ist er weg; die nächste `createStore()`-
+Instanz startet mit neuer Session-ID. Das ist Absicht: Der Store bereitet
+nur die *Struktur* für spätere Phasen (Pre-/Post-Test, Lernphase, Auswertung)
+vor und speichert noch nichts davon.
+
+```js
+const store = createStore();       // genau eine Instanz, erzeugt in main.js
+store.getState();                  // Kopie des aktuellen State (read-only)
+store.setState({ experiment: { id, presentation } });  // ersetzt genau die
+                                    // angegebenen OBERSTEN Bereiche komplett,
+                                    // andere Bereiche bleiben unverändert
+store.reset();                     // frischer Zustand, neue Session-ID
+const unsubscribe = store.subscribe((state) => { ... });
+```
+
+State-Struktur:
+
+```js
+{
+  session:    { id, startedAt },                       // keine personenbezogenen Daten
+  experiment: { id: null, presentation: null },         // aktuell geöffnetes Experiment/Darstellung
+  assessment: { pretest: null, learning: null, posttest: null },  // nur Platzhalter für spätere Phasen
+}
+```
+
+`main.js` erzeugt die eine Store-Instanz und reicht sie als zweiten Parameter
+an `render(container, { store })` weiter (der Router bekommt und besitzt den
+Store nicht). `main.js` selbst setzt `experiment.id` beim Öffnen/Verlassen
+eines Experiments; `content-experiment.js` ergänzt `experiment.presentation`,
+sobald eine Darstellung tatsächlich läuft – das ist die einzige Stelle, die
+das zuverlässig weiß. store.js kennt keine Mathematik: nur IDs als
+Zeichenketten, nie Inhalte oder Wertungen.
 
 ## Router (js/core/router.js)
 

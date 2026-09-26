@@ -16,6 +16,14 @@
  * Der Umschalter "Darstellung" im Rahmen ist eine technische Vorschau
  * für die Entwicklung. Er ist KEINE Gruppenzuweisung. Später (Ablauf/
  * Experiment) entscheidet der Ablauf, welche Darstellung gezeigt wird.
+ *
+ * Seit Phase 5: render(container, { store }) bekommt optional den
+ * Store aus main.js (js/core/store.js) als zweiten Parameter. show()
+ * ist die einzige Stelle, die zuverlässig weiß, welche Darstellung
+ * gerade läuft – deshalb aktualisiert genau sie experiment.id und
+ * experiment.presentation, sowohl beim ersten Anzeigen als auch bei
+ * jedem Wechsel über den Umschalter. Ohne Store (store === undefined,
+ * z.B. wenn render() isoliert aufgerufen wird) passiert einfach nichts.
  */
 
 import { createExperimentFrame } from "../components/experiment-frame.js";
@@ -24,7 +32,7 @@ import { getPresentation } from "../presentations/index.js";
 import { h } from "../presentations/dom.js";
 
 export function createContentRender(experiment) {
-  return function render(container) {
+  return function render(container, { store } = {}) {
     const content = getContent(experiment.contentId);
     const options = experiment.presentations.map(getPresentation);
     if (options.length === 0) {
@@ -57,6 +65,7 @@ export function createContentRender(experiment) {
       controls.replaceChildren();
       const result = presentation.render(content, { visualization, controls });
       stopPresentation = typeof result === "function" ? result : null;
+      store?.setState({ experiment: { id: experiment.id, presentation: presentation.id } });
     }
 
     const abort = new AbortController();

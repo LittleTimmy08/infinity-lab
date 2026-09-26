@@ -13,12 +13,19 @@
  *
  * main.js kennt selbst KEINE Mathematik – das ist Absicht.
  * Die Logik jedes Experiments steckt in js/modules/*.js.
+ *
+ * Seit Phase 5 erzeugt main.js außerdem GENAU EINE Store-Instanz
+ * (js/core/store.js, rein flüchtiger Laufzeit-Zustand, kein Speichern,
+ * kein window.store) und reicht sie an render() weiter. Der Router
+ * bekommt und besitzt den Store nicht – main.js verbindet beides nur
+ * lose über den zweiten Parameter von render().
  */
 
 import { categories, experiments } from "./modules/registry.js";
 import { createExperimentCard } from "./components/experiment-card.js";
 import { setupDropdown } from "./components/nav-dropdown.js";
 import { createRouter, buildPath } from "./core/router.js";
+import { createStore } from "./core/store.js";
 
 // Muster der Routen (die Platzhalter erklärt router.js)
 const HOME_PATH = "/";
@@ -34,6 +41,11 @@ const cardGrid = document.getElementById("experiment-cards");
 // Öffnen/Schließen des Dropdowns übernimmt nav-dropdown.js
 const exploreDropdown = setupDropdown(document.getElementById("nav-explore"));
 
+// Genau eine Store-Instanz für den gesamten Seiten-/Runtime-Lauf (siehe
+// js/core/store.js). Sie wird unten an render() weitergereicht, nicht an
+// den Router – der Router kennt den Store nicht und erzeugt auch keinen.
+const store = createStore();
+
 // Merkt sich pro Experiment seinen Menü-Eintrag (Schlüssel = experiment.id),
 // damit der aktive Eintrag markiert werden kann – egal ob man das Experiment
 // über das Menü oder über eine Karte auf der Startseite geöffnet hat.
@@ -47,6 +59,9 @@ function showHome() {
   homeView.hidden = false;
   stageElement.hidden = true;
   setActiveNav(null);
+  // Kein Experiment mehr offen: Der Store spiegelt nur den bekannten
+  // Navigationszustand wider, er ist nicht die Quelle der Wahrheit dafür.
+  store.setState({ experiment: { id: null, presentation: null } });
 }
 
 /**
@@ -62,7 +77,11 @@ function showExperiment(experiment) {
   homeView.hidden = true;
   stageElement.hidden = false;
   stageElement.innerHTML = "";
-  const cleanup = experiment.render(stageElement);
+  // Welche Darstellung konkret aktiv ist, weiß erst render() (bei
+  // Content/Presentation-Experimenten: content-experiment.js) – dort wird
+  // experiment.presentation gleich noch einmal gesetzt, sobald es feststeht.
+  store.setState({ experiment: { id: experiment.id, presentation: null } });
+  const cleanup = experiment.render(stageElement, { store });
   setActiveNav(experiment.id);
   window.scrollTo({ top: 0 });
 
