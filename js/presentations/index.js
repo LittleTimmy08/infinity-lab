@@ -20,8 +20,16 @@
 import { narrativePresentation } from "./narrative.js";
 import { visualPresentation } from "./visual.js";
 import { interactivePresentation } from "./interactive.js";
+import { countableInteractivePresentation } from "./countable-interactive.js";
+import { diagonalInteractivePresentation } from "./diagonal-interactive.js";
 
-const presentations = [narrativePresentation, visualPresentation, interactivePresentation];
+const presentations = [
+  narrativePresentation,
+  visualPresentation,
+  interactivePresentation,
+  countableInteractivePresentation,
+  diagonalInteractivePresentation,
+];
 
 export function getPresentation(id) {
   const presentation = presentations.find((item) => item.id === id);

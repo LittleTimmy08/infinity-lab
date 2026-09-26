@@ -42,48 +42,15 @@
  * derselbe Inhalt, mehrere Darstellungen. Die erste Darstellung der Liste
  * wird zuerst gezeigt. Hat ein Eintrag ein eigenes render(), bleibt es unverändert.
  *
- * Aktuell nutzt nur das Hilbert-Hotel die Content/Presentation-Struktur.
- * Die beiden anderen haben noch eine Platzhalter-render()-Funktion.
+ * Seit Phase 4 nutzen alle drei Experimente die Content/Presentation-
+ * Struktur. Jedes hat aktuell genau eine Darstellung (presentations mit
+ * nur einem Eintrag) – main.js zeigt dann keinen Umschalter an. Das ist
+ * keine wissenschaftliche Festlegung, sondern nur der aktuelle Stand:
+ * das Hilbert-Hotel bekommt später weitere, vergleichbare Darstellungen
+ * für das eigentliche Jugend-forscht-Experiment.
  */
 
-import { createExperimentFrame } from "../components/experiment-frame.js";
 import { createContentRender } from "./content-experiment.js";
-
-/**
- * Platzhalter: zeigt den Experiment-Rahmen mit Beispiel-Bedienelementen.
- * Die Elemente sind absichtlich "disabled", weil sie noch nichts steuern.
- * (Zum Testen von Hover/Fokus: `disabled` im Browser-Inspektor entfernen.)
- */
-function placeholderRender(title) {
-  return function (container) {
-    const { visualization, controls } = createExperimentFrame(container, {
-      title,
-      description: "Platzhalter – dieses Experiment ist noch nicht implementiert.",
-    });
-
-    visualization.innerHTML = `
-      <p class="placeholder-text">Hier erscheint später die Visualisierung.</p>
-    `;
-
-    controls.innerHTML = `
-      <button type="button" class="btn" disabled>Starten</button>
-      <button type="button" class="btn btn--secondary" disabled>Zurücksetzen</button>
-
-      <div class="field">
-        <div class="field-header">
-          <label class="field-label" for="demo-slider">Anzahl</label>
-          <output class="field-value" for="demo-slider">5</output>
-        </div>
-        <input class="slider" id="demo-slider" type="range" min="1" max="10" value="5" disabled>
-      </div>
-
-      <div class="field">
-        <label class="field-label" for="demo-input">Eingabe</label>
-        <input class="input" id="demo-input" type="text" placeholder="z. B. 42" disabled>
-      </div>
-    `;
-  };
-}
 
 export const categories = [
   { id: "mathematik", title: "Mathematik" },
@@ -105,12 +72,13 @@ const experimentDefinitions = [
   {
     id: "countable-nz",
     category: "mathematik",
-    title: "Abzählbarkeit: ℕ ↔ ℤ",
-    description: "Wie sich jeder ganzen Zahl eindeutig eine natürliche Zahl zuordnen lässt.",
-    symbol: "ℕ ↔ ℤ",
+    title: "Abzählbare Unendlichkeit",
+    description: "Wie man jedem Element einer unendlichen Menge eine eigene natürliche Zahl zuordnen kann.",
+    symbol: "ℕ",
     badge: "Abzählbarkeit",
-    status: "Platzhalter",
-    render: placeholderRender("Abzählbarkeit: ℕ ↔ ℤ"),
+    status: "Lernmodul",
+    contentId: "countable-nz",
+    presentations: ["countable-interactive"],
   },
   {
     id: "diagonal-argument",
@@ -119,8 +87,9 @@ const experimentDefinitions = [
     description: "Warum es unmöglich ist, alle reellen Zahlen in einer Liste zu erfassen.",
     symbol: "ℝ",
     badge: "Überabzählbarkeit",
-    status: "Platzhalter",
-    render: placeholderRender("Cantors Diagonalargument"),
+    status: "Lernmodul",
+    contentId: "diagonal-argument",
+    presentations: ["diagonal-interactive"],
   },
 ];
 

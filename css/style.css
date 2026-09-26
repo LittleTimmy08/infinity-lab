@@ -793,10 +793,6 @@ body,
   padding: var(--space-lg);
 }
 
-.placeholder-text {
-  color: var(--color-text-muted);
-}
-
 /* ---------- Darstellungen (Presentations) ----------
    Nur für die Platzhalter-Darstellungen aus js/presentations/.
    Baut ausschließlich auf vorhandenen Variablen auf. */
@@ -833,6 +829,127 @@ body,
 .presentation__svg {
   width: 100%;
   height: auto;
+}
+
+/* ---------- Schritt-Bausteine (countable-nz, diagonal-argument) ----------
+   Nur für die Stepper-Darstellungen aus js/presentations/step-kit.js,
+   countable-interactive.js und diagonal-interactive.js. Baut ausschließlich
+   auf vorhandenen Variablen auf. */
+
+.presentation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Aha-Moment-Kasten und Merksatz: derselbe ruhige, hervorgehobene Kasten */
+.presentation__box {
+  padding: var(--space-md);
+  border-radius: var(--radius);
+  background-color: var(--color-primary-soft);
+  border: 1px solid var(--color-border);
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.presentation__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+/* Zuordnung (countable-nz): Zeile aus Nummer, Pfeil, Element */
+.presentation__matching {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.presentation__matching-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.presentation__matching-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+  font-weight: 600;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.presentation__matching-arrow {
+  color: var(--color-text-muted);
+}
+
+/* Verständnisfrage: Antwortknöpfe untereinander + Rückmeldetext.
+   Die Farbe ist nur eine zusätzliche Kennzeichnung; der Text selbst
+   ("Richtig ..." / "Nicht ganz ...") sagt schon, was richtig ist. */
+.presentation__options {
+  display: grid;
+  gap: var(--space-sm);
+  max-width: 32rem;
+}
+
+.presentation__options .btn.is-selected {
+  border-color: var(--color-accent);
+}
+
+.presentation__feedback {
+  min-height: 1.3em;
+  font-size: 0.9rem;
+}
+
+.presentation__feedback--correct {
+  color: var(--color-success);
+}
+
+.presentation__feedback--incorrect {
+  color: var(--color-error);
+}
+
+/* Zifferndarstellung (diagonal-argument): eine Zeile pro Zahl der Liste.
+   Eine markierte Ziffer bekommt zusätzlich zur Farbe eckige Klammern
+   im Text, damit die Markierung nicht allein über Farbe läuft. */
+.presentation__list-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.presentation__list-index {
+  color: var(--color-text-muted);
+  width: 1.5rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.presentation__digits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1rem;
+}
+
+.presentation__digit {
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.presentation__digit--diagonal {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+  font-weight: 700;
 }
 
 /* ---------- Footer ---------- */

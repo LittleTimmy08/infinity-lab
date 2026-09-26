@@ -22,10 +22,17 @@ infinity-lab/
 │   ├── content/             CONTENT: mathematischer Inhalt als reine Daten
 │   │   ├── index.js         getContent(id), Inhalte werden eingefroren
 │   │   ├── hilbert-hotel.js Inhalt zum Hilbert-Hotel
-│   │   └── rules.js         Auswertung der Zimmerregeln (n → n+1, n → 2n)
-│   ├── presentations/       PRESENTATION: Darstellungen desselben Inhalts (Platzhalter)
+│   │   ├── rules.js         Auswertung der Zimmerregeln (n → n+1, n → 2n)
+│   │   ├── countable-nz.js  Inhalt zur abzählbaren Unendlichkeit
+│   │   ├── diagonal-argument.js  Inhalt zu Cantors Diagonalargument
+│   │   └── diagonal.js      Auswertung der Diagonale/neuen Zahl (reine Mathematik)
+│   ├── presentations/       PRESENTATION: Darstellungen desselben Inhalts
 │   │   ├── index.js         getPresentation(id)
-│   │   ├── narrative.js, visual.js, interactive.js
+│   │   ├── narrative.js, visual.js, interactive.js    (Hilbert-Hotel, Platzhalter)
+│   │   ├── countable-interactive.js, diagonal-interactive.js  (eigenständige Lernmodule)
+│   │   ├── stepper.js       gemeinsamer Schritt-für-Schritt-Rahmen (Zurück/Weiter + Zähler)
+│   │   ├── step-kit.js      gemeinsame Schrittarten (Text, Aha-Moment, Quiz, Zusammenfassung)
+│   │   ├── quiz.js          kleine Verständnisfrage mit sofortiger Rückmeldung (kein Test)
 │   │   └── dom.js           kleiner Helfer zum Bauen von DOM-Elementen
 │   └── modules/
 │       ├── registry.js      Zentrale Liste aller Experimente
@@ -131,9 +138,33 @@ js/content/hilbert-hotel.js      (ein Inhalt)
 - **Umschalter im Experiment ("Darstellung (technische Vorschau)"):** nur für die
   Entwicklung. Er ist keine Gruppenzuweisung.
 
-Die Namen `narrative`, `visual` und `interactive` sind technische Platzhalter und
-legen keine Versuchsgruppen fest. Sprache und Lernziele im Content sind Entwürfe
-und noch nicht an Klasse 5–7 angepasst.
+Die Namen `narrative`, `visual` und `interactive` (beim Hilbert-Hotel) sind
+technische Platzhalter und legen keine Versuchsgruppen fest. Sprache und
+Lernziele im Hilbert-Hotel-Content sind Entwürfe und noch nicht an Klasse 5–7
+angepasst.
+
+## Lernmodule: Abzählbare Unendlichkeit / Cantors Diagonalargument
+
+`countable-nz` und `diagonal-argument` sind seit Phase 4 eigenständige,
+funktionierende Lernmodule (Badge „Lernmodul“ statt „Platzhalter“) – anders
+als das Hilbert-Hotel, das später das eigentliche Forschungsmodul mit
+mehreren vergleichbaren Darstellungen wird. Beide nutzen dieselbe
+Content/Presentation-Architektur, aber je nur **eine** Darstellung
+(`countable-interactive` bzw. `diagonal-interactive`), deshalb zeigen sie
+keinen Darstellungs-Umschalter.
+
+Beide Darstellungen sind ein geführter Ablauf aus mehreren Schritten
+(`stepper.js`: Zurück/Weiter + Zähler „Schritt x von y“). Wiederkehrende
+Schrittarten – ein Text-Schritt, der hervorgehobene Aha-Moment, eine kleine
+Verständnisfrage (`quiz.js`) und die Zusammenfassung – kommen aus
+`step-kit.js` und lesen dafür `content.ahaMoment` / `content.quiz` /
+`content.summary`. Die jeweils besonderen Schritte (die interaktive
+Zuordnung bei `countable-nz`; das Markieren der Diagonale und das
+Konstruieren der neuen Zahl bei `diagonal-argument`) stehen direkt in der
+jeweiligen `*-interactive.js`.
+
+Die Verständnisfrage ist **kein** Pre-/Post-Test: Es wird nichts gespeichert
+oder ausgewertet, die Auswahl lebt nur im DOM/JS-Zustand des Schritts.
 
 ## Router (js/core/router.js)
 

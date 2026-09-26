@@ -10,6 +10,8 @@
  */
 
 import { hilbertHotelContent } from "./hilbert-hotel.js";
+import { countableNzContent } from "./countable-nz.js";
+import { diagonalArgumentContent } from "./diagonal-argument.js";
 
 function deepFreeze(value) {
   if (value && typeof value === "object" && !Object.isFrozen(value)) {
@@ -19,7 +21,7 @@ function deepFreeze(value) {
   return value;
 }
 
-const contents = [hilbertHotelContent].map(deepFreeze);
+const contents = [hilbertHotelContent, countableNzContent, diagonalArgumentContent].map(deepFreeze);
 
 export function getContent(id) {
   const content = contents.find((item) => item.id === id);
