@@ -952,6 +952,103 @@ body,
   font-weight: 700;
 }
 
+/* ---------- Forschungsmodus (research, assessment) ----------
+   Eigener, schlanker Rahmen fuer T1/T2/T3 und die Rahmen-Bildschirme
+   (Code eingeben, Warten, Fertig). Bewusst NICHT experiment-layout:
+   einspaltig, kein Visualisierung/Steuerung-Split. Baut nur auf
+   vorhandenen Variablen/Komponenten auf (.btn, .field, .input). */
+
+.research {
+  max-width: 32rem;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--space-md);
+}
+
+.research__muted {
+  color: var(--color-text-muted);
+}
+
+.research__actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.research__feedback {
+  min-height: 1.3em;
+  color: var(--color-error);
+  font-size: 0.9rem;
+}
+
+.research__divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-sm) 0;
+}
+
+.research__code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.research__code-banner {
+  max-width: 32rem;
+  margin: 0 auto var(--space-md);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.assessment {
+  max-width: 32rem;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.assessment__header h2 {
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.assessment__progress {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.assessment__item {
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  display: grid;
+  gap: var(--space-md);
+}
+
+.assessment__prompt {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.assessment__options {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.assessment__textarea {
+  width: 100%;
+  min-height: 6rem;
+  resize: vertical;
+  font: inherit;
+}
+
+.assessment__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
 /* ---------- Footer ---------- */
 
 .site-footer {

@@ -19,6 +19,15 @@
  * kein window.store) und reicht sie an render() weiter. Der Router
  * bekommt und besitzt den Store nicht – main.js verbindet beides nur
  * lose über den zweiten Parameter von render().
+ *
+ * Seit Phase 6A gibt es zusätzlich den Forschungsmodus unter
+ * "#/lab/:id/:step" (js/research/flow.js). Er ist eine eigene
+ * Anwendungsschicht, komplett getrennt vom freien Demo-Modus: kein
+ * gemeinsamer Zustand mit dem Store oben, keine Berührung mit
+ * registry.js/content-experiment.js. main.js erzeugt dafür genau eine
+ * participantStore-Instanz (js/data/participant-store.js), aktuell mit
+ * dem reinen Entwicklungs-Mock aus js/data/mock-backend.js – Phase 6B
+ * ersetzt nur dieses Backend.
  */
 
 import { categories, experiments } from "./modules/registry.js";
@@ -26,10 +35,14 @@ import { createExperimentCard } from "./components/experiment-card.js";
 import { setupDropdown } from "./components/nav-dropdown.js";
 import { createRouter, buildPath } from "./core/router.js";
 import { createStore } from "./core/store.js";
+import { createParticipantStore } from "./data/participant-store.js";
+import { mockBackend } from "./data/mock-backend.js";
+import { RESEARCH_STEPS, renderResearchStep } from "./research/flow.js";
 
 // Muster der Routen (die Platzhalter erklärt router.js)
 const HOME_PATH = "/";
 const EXPERIMENT_PATH = "/experiment/:id";
+const RESEARCH_PATH = "/lab/:id/:step";
 
 const homeNavButton = document.getElementById("nav-home");
 const exploreTrigger = document.getElementById("nav-explore-trigger");
@@ -45,6 +58,12 @@ const exploreDropdown = setupDropdown(document.getElementById("nav-explore"));
 // js/core/store.js). Sie wird unten an render() weitergereicht, nicht an
 // den Router – der Router kennt den Store nicht und erzeugt auch keinen.
 const store = createStore();
+
+// Genau eine Teilnehmer-Persistenz-Instanz für den Forschungsmodus (siehe
+// js/data/participant-store.js). Rein additiv zum obigen Demo-Store, beide
+// kennen sich nicht. Das Backend dahinter ist in Phase 6A immer der
+// Entwicklungs-Mock; Phase 6B tauscht nur dieses eine Argument aus.
+const participantStore = createParticipantStore(mockBackend);
 
 // Merkt sich pro Experiment seinen Menü-Eintrag (Schlüssel = experiment.id),
 // damit der aktive Eintrag markiert werden kann – egal ob man das Experiment
@@ -88,6 +107,35 @@ function showExperiment(experiment) {
   return () => {
     if (typeof cleanup === "function") cleanup();
     stageElement.innerHTML = ""; // erst nach dem Aufräumen: das Experiment sieht sein DOM noch
+  };
+}
+
+/**
+ * Blendet einen Schritt des Forschungsmodus ein und die Startseite aus.
+ * Wird vom Router aufgerufen, wenn die Adresse "#/lab/<id>/<step>" ist.
+ *
+ * Der Forschungsmodus hat keinen Navigationseintrag: Weder "Startseite"
+ * noch ein Experiment im Dropdown ist hier aktiv. setActiveNav(null) würde
+ * fälschlich "Startseite" markieren (siehe deren Kommentar unten), deshalb
+ * werden hier beide Zustände direkt selbst zurückgesetzt, ohne die für
+ * Demo/Startseite zuständige Funktion anzufassen.
+ */
+function showResearch(id, step) {
+  homeView.hidden = true;
+  stageElement.hidden = false;
+  stageElement.innerHTML = "";
+
+  homeNavButton.classList.remove("is-active");
+  homeNavButton.removeAttribute("aria-current");
+  exploreTrigger.classList.remove("is-active");
+  menuItems.forEach((item) => item.removeAttribute("aria-current"));
+
+  const cleanup = renderResearchStep(stageElement, { id, step, navigate: router.navigate, participantStore });
+  window.scrollTo({ top: 0 });
+
+  return () => {
+    if (typeof cleanup === "function") cleanup();
+    stageElement.innerHTML = "";
   };
 }
 
@@ -189,7 +237,9 @@ function buildCards() {
 // entscheidet main.js. "guard" verhindert, dass eine unbekannte Experiment-ID
 // eine leere Seite zeigt: Der Router führt sie stattdessen auf "#/" zurück.
 //
-// Später (Phase 6) kommt hier z.B. { path: "/lab/:id/:step", ... } dazu.
+// Der Forschungsmodus ist in Phase 6A bewusst auf "hilbert-hotel" begrenzt
+// (das ist das einzige Forschungsexperiment) – kein Hinweis auf eine
+// fehlende Erweiterbarkeit, sondern exakt der aktuelle Stand.
 const router = createRouter({
   routes: [
     { path: HOME_PATH, enter: showHome },
@@ -197,6 +247,11 @@ const router = createRouter({
       path: EXPERIMENT_PATH,
       guard: ({ id }) => experiments.some((experiment) => experiment.id === id),
       enter: ({ id }) => showExperiment(experiments.find((experiment) => experiment.id === id)),
+    },
+    {
+      path: RESEARCH_PATH,
+      guard: ({ id, step }) => id === "hilbert-hotel" && RESEARCH_STEPS.includes(step),
+      enter: ({ id, step }) => showResearch(id, step),
     },
   ],
 });

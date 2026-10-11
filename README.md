@@ -19,7 +19,17 @@ infinity-lab/
 │   ├── components/
 │   │   ├── experiment-card.js    Karte eines Experiments (Startseite)
 │   │   ├── nav-dropdown.js       Öffnen/Schließen des Experimente-Dropdowns
-│   │   └── experiment-frame.js   Rahmen einer Experiment-Seite (Visualisierung + Steuerung)
+│   │   ├── experiment-frame.js   Rahmen einer Experiment-Seite (Visualisierung + Steuerung)
+│   │   └── assessment-frame.js   Eigener, schlanker Rahmen für T1/T2/T3 (Forschungsmodus)
+│   ├── data/                Backend-Anbindung fuer den Forschungsmodus (Phase 6A: Mock)
+│   │   ├── participant-store.js  Schnittstelle, kennt kein konkretes Backend
+│   │   └── mock-backend.js  NUR Entwicklung/Tests, In-Memory, kein localStorage
+│   ├── research/             Forschungs-Flow (Hilbert-Hotel-Studie, eigene Anwendungsschicht)
+│   │   ├── flow.js          Routen-Dispatcher, Code-/Abschluss-Bildschirm, Wiederaufnahme
+│   │   ├── learning-step.js Lernphase: zeigt genau eine zugewiesene Darstellung
+│   │   └── assessment-step.js  T1/T2/T3 ueber die gemeinsame Assessment-Infrastruktur
+│   ├── assessment/           Testitems als reine Daten (noch Platzhalter, Phase 6A)
+│   │   └── placeholder-items.js
 │   ├── content/             CONTENT: mathematischer Inhalt als reine Daten
 │   │   ├── index.js         getContent(id), Inhalte werden eingefroren
 │   │   ├── hilbert-hotel.js Inhalt zum Hilbert-Hotel
@@ -203,6 +213,41 @@ eines Experiments; `content-experiment.js` ergänzt `experiment.presentation`,
 sobald eine Darstellung tatsächlich läuft – das ist die einzige Stelle, die
 das zuverlässig weiß. store.js kennt keine Mathematik: nur IDs als
 Zeichenketten, nie Inhalte oder Wertungen.
+
+## Forschungsmodus (js/research/, js/data/, js/assessment/)
+
+Eigene, vom freien Demo-Modus komplett getrennte Anwendungsschicht für die
+Hilbert-Hotel-Studie (siehe technische Spezifikation v1.3). Eigene Routen
+unter `#/lab/hilbert-hotel/<schritt>` (`code`, `t1`, `learning`, `t2`, `t3`,
+`done`), eigener Zustand (nicht der Store aus Phase 5), eigener Assessment-
+Rahmen (nicht `experiment-frame.js`).
+
+- **Ablauf:** Code erzeugen/eingeben → T1 → serverseitige Gruppenzuweisung
+  (aktuell: Mock) → Lernphase (genau eine Darstellung, kein Umschalter) → T2
+  → Wartebildschirm → T3 (nach Freischaltung) → Abschluss. `js/research/
+  flow.js` prüft bei jedem Schritt den geladenen Teilnehmer-Status und leitet
+  freundlich zum richtigen Schritt weiter – das ist **keine** Autorisierung,
+  nur eine Komfortfunktion; die verbindliche Prüfung kommt serverseitig in
+  Phase 6B.
+- **Teilnehmer-Code:** lebt nur als Modul-Variable in `flow.js`, nicht im
+  Store, nicht in `localStorage` – geht bei Reload bewusst verloren (wie im
+  echten System: man gibt ihn auf einem neuen Gerät/nach einer Pause erneut
+  ein).
+- **Persistenz (Phase 6A):** `js/data/participant-store.js` ist die
+  Schnittstelle, `js/data/mock-backend.js` eine klar als Entwicklungs-Mock
+  gekennzeichnete, rein flüchtige In-Memory-Implementierung (kein
+  `localStorage`). Phase 6B tauscht nur das Backend-Objekt gegen einen
+  echten Client für den Cloudflare Worker aus – Flow und Assessment ändern
+  sich dadurch nicht.
+- **Gruppe A/B = bestehende Darstellungen:** Die Lernphase ruft
+  `getPresentation("interactive")` bzw. `getPresentation("narrative")`
+  direkt auf (nicht über `content-experiment.js`, dessen freier Umschalter
+  im Forschungsmodus nicht sichtbar sein darf) und reicht sie an
+  `experiment-frame.js` ohne Toolbar durch — dieselben Darstellungen wie in
+  der freien Demo, nur ohne Wahlmöglichkeit.
+- **Items:** `js/assessment/placeholder-items.js` enthält ausdrücklich nur
+  technische Platzhalter (`[Platzhalter]`-Präfix), keine der später
+  fachlich entwickelten Testfragen.
 
 ## Router (js/core/router.js)
 
